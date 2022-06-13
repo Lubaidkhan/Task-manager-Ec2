@@ -33,19 +33,19 @@ const getTask = asyncWrapper(async (req, res, next) => {
   res.status(200).json({ task })
 })
 const deleteTask = asyncWrapper(async (req, res, next) => {
-  const { id: taskID } = req.params
-  const task = await Task.findOneAndDelete({ _id: taskID })
+  const  id = req.params.id
+  const task = await Task.findOneAndDelete({ _id: id })
   if (!task) {
-    return next(createCustomError(`No task with id : ${taskID}`, 404))
+    return next(createCustomError(`No task with id : ${id}`, 404))
   }
   res.status(200).json({ task })
 })
 const updateTask = asyncWrapper(async (req, res, next) => {
-  const { taskID: taskID } = req.params
+  const  id = req.params.id
 
-  console.log(taskID)
+  console.log(id)
 
-  const task = await Task.findOneAndUpdate({ taskID: taskID },
+  const task = await Task.findOneAndUpdate({ _id: id },
     // { $rename: { 'Task Id': '1', 'Name': 'demouser' } },
      req.body, {
     new: true,

@@ -45,28 +45,34 @@ editFormDOM.addEventListener('submit', async (e) => {
   editBtnDOM.textContent = 'Loading...'
   e.preventDefault()
   try {
-   
+
     
     const taskName = taskNameDOM.value
     const taskCompleted = taskCompletedDOM.checked
 
     const {
       data: { task },
+
+   
     } = await axios.patch(`/api/v1/tasks/${id}`, {
+      
       name: taskName,
       completed: taskCompleted,
     })
 
     console.log(task)
 
-    const { taskID, completed, name } = task
+    const { taskID, completed, name,_id } = task
 
-   taskID,
+    console.log("inside patch",task)
+
+    editBtnDOM.textContent= _id
     taskNameDOM.value = name
     tempName = name
     if (completed) {
       taskCompletedDOM.checked = true
     }
+    // task.data();
     formAlertDOM.style.display = 'block'
     formAlertDOM.textContent = `success, edited task`
     formAlertDOM.classList.add('text-success')

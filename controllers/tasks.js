@@ -5,19 +5,29 @@ const { createCustomError } = require('../errors/custom-error')
 
 const getAllTasks = asyncWrapper(async (req, res) => {
   const tasks = await Task.find({})
+
+  // console.log(tasks)
   res.status(200).json({ tasks })
+
+
 })
 
 const createTask = asyncWrapper(async (req, res) => {
+
+  // console.log(req.body)
   const task = await Task.create(req.body)
+
+ 
   res.status(201).json({ task })
 })
 
 const getTask = asyncWrapper(async (req, res, next) => {
-  const { id: taskID } = req.params
-  const task = await Task.findOne({ _id: taskID })
+  const  id = req.params.id
+
+  console.log("inside gettask",req.params);
+  const task = await Task.findOne({ _id: id })
   if (!task) {
-    return next(createCustomError(`No task with id : ${taskID}`, 404))
+    return next(createCustomError(`No task with id : ${id}`, 404))
   }
 
   res.status(200).json({ task })
@@ -31,9 +41,13 @@ const deleteTask = asyncWrapper(async (req, res, next) => {
   res.status(200).json({ task })
 })
 const updateTask = asyncWrapper(async (req, res, next) => {
-  const { id: taskID } = req.params
+  const { taskID: taskID } = req.params
 
-  const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
+  console.log(taskID)
+
+  const task = await Task.findOneAndUpdate({ taskID: taskID },
+    // { $rename: { 'Task Id': '1', 'Name': 'demouser' } },
+     req.body, {
     new: true,
     runValidators: true,
   })
@@ -41,6 +55,8 @@ const updateTask = asyncWrapper(async (req, res, next) => {
   if (!task) {
     return next(createCustomError(`No task with id : ${taskID}`, 404))
   }
+
+  console.log(task)
 
   res.status(200).json({ task })
 })

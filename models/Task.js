@@ -11,6 +11,11 @@ const TaskSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+
+  taskID:{
+    type : String,
+    
+  }
 })
 
 module.exports = mongoose.model('Task', TaskSchema)

@@ -9,29 +9,44 @@ const id = new URLSearchParams(params).get('id')
 let tempName
 
 const showTask = async () => {
+
+  console.log('called showtask',id)
   try {
     const {
       data: { task },
     } = await axios.get(`/api/v1/tasks/${id}`)
-    const { _id: taskID, completed, name } = task
 
-    taskIDDOM.textContent = taskID
+    const { taskID, completed, name } = task
+    // console.log(task.data.args)
+    // console.log(id);
+    taskIDDOM.innerHTML = taskID
     taskNameDOM.value = name
     tempName = name
     if (completed) {
       taskCompletedDOM.checked = true
     }
+   
+    // return task
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
-showTask()
+document.addEventListener("DOMContentLoaded", function() {
+  // code
+  console.log("DOMContentLoaded")
+  showTask()
+});
+
+
+
 
 editFormDOM.addEventListener('submit', async (e) => {
   editBtnDOM.textContent = 'Loading...'
   e.preventDefault()
   try {
+   
+    
     const taskName = taskNameDOM.value
     const taskCompleted = taskCompletedDOM.checked
 
@@ -42,9 +57,11 @@ editFormDOM.addEventListener('submit', async (e) => {
       completed: taskCompleted,
     })
 
-    const { _id: taskID, completed, name } = task
+    console.log(task)
 
-    taskIDDOM.textContent = taskID
+    const { taskID, completed, name } = task
+
+   taskID,
     taskNameDOM.value = name
     tempName = name
     if (completed) {
@@ -53,6 +70,7 @@ editFormDOM.addEventListener('submit', async (e) => {
     formAlertDOM.style.display = 'block'
     formAlertDOM.textContent = `success, edited task`
     formAlertDOM.classList.add('text-success')
+    // return task
   } catch (error) {
     console.error(error)
     taskNameDOM.value = tempName
